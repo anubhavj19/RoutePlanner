@@ -10,6 +10,7 @@
 
 using namespace std::experimental;
 
+
 static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 {   
     std::ifstream is{path, std::ios::binary | std::ios::ate};
@@ -26,6 +27,12 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
         return std::nullopt;
     return std::move(contents);
 }
+
+
+bool inRange(float low, float high, float input){
+    return ((low <= input) && (input <= high));
+}
+
 
 int main(int argc, const char **argv)
 {    
@@ -52,11 +59,41 @@ int main(int argc, const char **argv)
             osm_data = std::move(*data);
     }
     
-    // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
-    // user input for these values using std::cin. Pass the user input to the
-    // RoutePlanner object below in place of 10, 10, 90, 90.
     float start_x, start_y, end_x, end_y;
-    std::cin >> start_x >> start_y >> end_x >> end_y;
+    float min = 0.0f;
+    float max = 100.0f;
+
+    std::cout << "Enter X coordinate of Source (between 0 and 100): \n";
+    std::cin >> start_x;
+    while(!inRange(min, max, start_x)){
+        std::cout << "Enter X coordinate of Source (between 0 and 100): \n";
+        std::cin >> start_x; 
+    }
+
+    std::cout << "Enter Y coordinate of Source (between 0 and 100): \n";
+    std::cin >> start_y;
+    while(!inRange(min, max, start_y)){
+        std::cout << "Enter Y coordinate of Source (between 0 and 100): \n";
+        std::cin >> start_y; 
+    }
+
+    std::cout << "Enter X coordinate of Destination (between 0 and 100): \n";
+    std::cin >> end_x;
+    while(!inRange(min, max, end_x)){
+        std::cout << "Enter X coordinate of Destination (between 0 and 100): \n";
+        std::cin >> end_x; 
+    }
+
+    std::cout << "Enter Y coordinate of Destination (between 0 and 100): \n";
+    std::cin >> end_y;
+    while(!inRange(min, max, end_y)){
+        std::cout << "Enter Y coordinate of Destination (between 0 and 100): \n";
+        std::cin >> end_y; 
+    }
+
+    std::cout << "Coordinates are: \n"; 
+    std::cout << "Source: " << start_x << ", " << start_y << "\n";
+    std::cout << "Destination: " << end_x << ", " << end_y << "\n";
 
     // Build Model.
     RouteModel model{osm_data};
